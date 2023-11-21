@@ -17,7 +17,6 @@ int main()
    EcrireTexte(WindowLength/3, Heigth, "Snake", 2);
    ChoisirCouleurDessin(CouleurParComposante(110, 207,39));
    RemplirRectangle(20, 50, 1240, 800);
-   ChargerSprite(FILE* apple);
    Touche();
    FermerGraphique();
    return EXIT_SUCCESS;
