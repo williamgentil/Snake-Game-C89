@@ -4,8 +4,8 @@
 
 int main()
 { 
-   FILE* apple;
-   apple=fopen("item 2-1.png.png", "r");
+   FILE *apple;
+   char apple_sprite[]="item 2-1.png.png";
    int Length=60, Heigth=40;
    int WindowMargin=10, WindowLength=32*Length, WindowHeigth=25.5*Heigth;
    int GameScreenMarginX=Length, GameScreenMarginY=WindowMargin+Heigth;
@@ -19,7 +19,10 @@ int main()
    EcrireTexte(WindowLength/2.15, Heigth, "Snake", 2);
    ChoisirCouleurDessin(CouleurParComposante(157, 207, 31));
    RemplirRectangle(GameScreenMarginX, GameScreenMarginY, GameScreenLength, GameScreenHeigth);
+   apple=fopen("item 2-1.png.png", "r");
+   //ChargerSprite(*apple); <- Pose un problème pour l'instant
    Touche();
+   fclose(apple);
    FermerGraphique();
    return EXIT_SUCCESS;
 }
