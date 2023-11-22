@@ -3,11 +3,11 @@
 
 void afficherBarreDeChargement(int total, int progression) {
     const int longueurBarre = 50;
-    int pourcentage = (progression * 100) / total;
-    int numBarres = (progression * longueurBarre) / total;
+    int pourcentage = (progression * 100) / total; // Formule mathématique du pourcentage 
+    int numBarres = (progression * longueurBarre) / total; 
 
     printf("[");
-    for (int i = 0; i < longueurBarre; ++i) {
+    for (int i = 0; i < longueurBarre; ++i) { // Boucle pour print la barre au fur et à mesure
         if (i < numBarres) {
             printf("=");
         } else {
@@ -15,7 +15,7 @@ void afficherBarreDeChargement(int total, int progression) {
         }
     }
     printf("] %d%%\r", pourcentage);
-    fflush(stdout);
+    fflush(stdout); // Vide le contenu du flux de sortie
 }
 
 int main() {
