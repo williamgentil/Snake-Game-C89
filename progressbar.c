@@ -23,7 +23,7 @@ int main() {
 
     for (int i = 0; i <= total; ++i) {
         afficherBarreDeChargement(total, i);
-        usleep(30000); // Pause de 100 000 microsecondes (0.1 seconde)
+        usleep(30000); // Pause de 30000 microsecondes (0.03 seconde)
     }
     printf("\nChargement terminé!\n");
 
