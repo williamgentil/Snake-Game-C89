@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <graph.h>
+
 void window(){
    int Length=60, Heigth=40;
    int WindowMargin=10, WindowLength=32*Length, WindowHeigth=25.5*Heigth;
@@ -19,14 +20,7 @@ void window(){
    FermerGraphique();
    return;
 }
-void apple(){
-   FILE *apple;
-   apple=fopen("Apple_JE3_BE3.png", "w");
-   ChargerImage(apple, 0, 0, 0, 0, 0, 0); //<- Pose un problème pour l'instant
-   Touche();
-   fclose(apple);
-   return;
-}
+
 int main(void)
 { 
    window();
