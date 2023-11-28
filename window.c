@@ -29,6 +29,7 @@ void apple(){
 }
 int main(void)
 { 
+   window();
    return 0;
 }
    
