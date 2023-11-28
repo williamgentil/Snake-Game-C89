@@ -19,8 +19,8 @@ int main()
    EcrireTexte(WindowLength/2.15, Heigth, "Snake", 2);
    ChoisirCouleurDessin(CouleurParComposante(157, 207, 31));
    RemplirRectangle(GameScreenMarginX, GameScreenMarginY, GameScreenLength, GameScreenHeigth);
-   apple=fopen("item 2-1.png.png", "r");
-   //ChargerSprite(*apple); <- Pose un problème pour l'instant
+   apple=fopen("Apple_JE3_BE3.png", "r");
+   ChargerSprite(FILE *apple); //<- Pose un problème pour l'instant
    Touche();
    fclose(apple);
    FermerGraphique();
