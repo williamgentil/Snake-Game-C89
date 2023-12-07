@@ -1,50 +1,47 @@
 #include <stdlib.h>
 #include <time.h>
-#include <ncurses.h>
+#include <graph.h>
 
-// compilation : gcc snake.c -o snake -lncurses
-// passer un argument quelconque au programme pour activer le mode lolilol
 
-#define CORP_SNAKE '-'
+/* #define CORP_SNAKE '-'
 #define TETE_SNAKE 'B'
 #define DU_MANGER '*'
-#define CASE_VIDE ' '
+#define CASE_VIDE ' ' */
 
 
 // VARIABLES GLOBALES
 char ** grille = NULL;
-int nbLignes = 0;
-int nbColonnes = 0;
-int modeEvolueDansLequelLeSerpentPeutPasserATraversLesMursEtCeSansAvoirMalDuToutCeQuiEstTresPratiqueCarCaPermetDeJouerPlusLongtemps = 0; // mode lolilol
+int nbLignes = 40;
+int nbColonnes = 60;
 
 // STRUCTURES POUR LE SNAKE
-struct uneCellule {
+struct Case {
   int ligne;
   int colonne;
-  struct uneCellule * suiv;
+  struct Case * suiv;
 };
-typedef struct uneCellule uneCellule;
+typedef struct Case Case;
 
-struct unSnake {
-  uneCellule * teteSnake;
-  uneCellule * queueSnake;
+struct Snake {
+  Case * teteSnake;
+  Case * queueSnake;
 };
-typedef struct unSnake unSnake;
+typedef struct Snake Snake;
 
-struct uneDirection {
+struct Direction {
   int ligne;
   int colonne;
 };
-typedef struct uneDirection uneDirection;
+typedef struct Direction Direction;
 
 // Creation d'un snake de base
-unSnake creerSnake() {
+Snake creerSnake() {
 
-  unSnake snake;
+  Snake snake;
 
-  uneCellule * teteSnake = malloc(sizeof(uneCellule));
-  uneCellule * queueSnake = malloc(sizeof(uneCellule));
-  uneCellule * milieuSnake = malloc(sizeof(uneCellule));
+  Case * teteSnake = malloc(sizeof(Case));
+  Case * milieuSnake = malloc(sizeof(Case));
+  Case * queueSnake = malloc(sizeof(Case));
 
   teteSnake->ligne = 1;
   teteSnake->colonne = 4;
@@ -65,10 +62,10 @@ unSnake creerSnake() {
 }
 
 // Redéfini la tête du snake aux coordonnées indiquées
-// Gère les collisions avec les bords (sauf si mode lolilol) et le snake
+// Gère les collisions avec les bords et le snake
 // Vérifie si le snake mange quelque chose
-void ajouterEnTete (unSnake * snake, int ligne, int colonne,int * aMange, int * fail) {
-  uneCellule * nouvelleTete = malloc (sizeof(uneCellule));
+void ajouterEnTete (Snake * snake, int ligne, int colonne,int * aMange, int * fail) {
+  Case * nouvelleTete = malloc (sizeof(Case));
 
   nouvelleTete->ligne = ligne;
   nouvelleTete->colonne = colonne;
@@ -79,25 +76,6 @@ void ajouterEnTete (unSnake * snake, int ligne, int colonne,int * aMange, int * 
   snake->teteSnake = snake->teteSnake->suiv;
 
   // GESTION DES COLLISIONS 
-  if ( modeEvolueDansLequelLeSerpentPeutPasserATraversLesMursEtCeSansAvoirMalDuToutCeQuiEstTresPratiqueCarCaPermetDeJouerPlusLongtemps) { 
-    if( snake->teteSnake->ligne < 0) {
-      snake->teteSnake->ligne = nbLignes - 1; 
-    }
-
-    else if( snake->teteSnake->ligne > nbLignes-1) {
-      snake->teteSnake->ligne = 0; 
-    }
-    else if (snake->teteSnake->colonne < 0) {
-      snake->teteSnake->colonne = nbColonnes - 1; 
-    }
-    else if ( snake->teteSnake->colonne > nbColonnes-1) {
-      snake->teteSnake->colonne = 0; 
-    }
-    else if (grille[snake->teteSnake->ligne][snake->teteSnake->colonne] == CORP_SNAKE) {
-      *fail = 1;
-    }
-  }
-  else {
     if( snake->teteSnake->ligne < 0 ||
 	snake->teteSnake->ligne > nbLignes-1 ||
 	snake->teteSnake->colonne < 0 ||
@@ -110,11 +88,10 @@ void ajouterEnTete (unSnake * snake, int ligne, int colonne,int * aMange, int * 
     *aMange = (grille[snake->teteSnake->ligne][snake->teteSnake->colonne] == DU_MANGER) ? 1 : 0;
     grille[snake->teteSnake->ligne][snake->teteSnake->colonne] = TETE_SNAKE;
   }
-}
 
 // Supprime la queue du snake
-void supprimerQueue(unSnake * snake) {
-  uneCellule * auxi;
+void supprimerQueue(Snake * snake) {
+  Case * auxi;
 
   auxi = snake->queueSnake;
   grille[snake->queueSnake->ligne][snake->queueSnake->colonne] = CASE_VIDE;
@@ -131,7 +108,7 @@ void initGrille() {
   }
 }
 
-void afficherGrille(unSnake snake) {
+void afficherGrille(Snake snake) {
   int i , j = 0;
   for (i = 0; i<nbLignes;i++) {
     for (j=0;j<nbColonnes;j++) {
@@ -140,7 +117,7 @@ void afficherGrille(unSnake snake) {
   }
 }
 
-void gererEvenement(unSnake * snake, int touche, int * fail, uneDirection * direction,int * aMange) {
+void gererEvenement(Snake * snake, int touche, int * fail, Direction * direction,int * aMange) {
   if(direction->ligne == 0) { // Pour ne pas 'aller en arrière'
     if (touche == KEY_UP){ 
       direction->ligne = -1;
@@ -202,8 +179,8 @@ int main (int argc, char * argv []) {
   int i = 0;
   int touche = 0; // touche pressee par le joueur
   int fail = 0; // bool
-  unSnake snake = creerSnake();
-  uneDirection direction = {0,1};
+  Snake snake = creerSnake();
+  Direction direction = {0,1};
   int aMange = 1; // bool
   int nbCasesMangees = 0;
   int delay = 0;
