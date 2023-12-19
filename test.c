@@ -5,14 +5,16 @@
 
 
 #define delta 1000000L
-#define CYCLE 10000L
+#define CYCLE 100000L
 #define MAX_LENGTH 200
 #define PAUSE 100000L
 
 int windowWidth = 1100;
 int windowHeight = 600;
 int score = 0;
-
+unsigned long temps = 0;
+unsigned long debutJeu;
+unsigned long suivant;
 
 typedef struct {
     int x;
@@ -27,6 +29,13 @@ typedef struct {
 void Temps(unsigned long us) {
     unsigned long attente = Microsecondes() + us;
     while (Microsecondes() < attente) {}
+}
+unsigned long MicrosecondesDepuisDebut() {
+    return Microsecondes() - debutJeu;
+}
+
+unsigned long SecondesDepuisDebut() {
+    return MicrosecondesDepuisDebut() / 1000000L;
 }
 
 void Init_Snake(SnakeCase snake[], int SnakeLength) {
@@ -86,6 +95,7 @@ void EraseSnake(SnakeCase snake[], int SnakeLength) {
         RemplirRectangle(snake[i].x, snake[i].y, 20, 20);
     }
 }
+
 
 void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
     int i;
@@ -224,8 +234,9 @@ int main() {
     int apples_number = 0;
     int delay = 80000;
     int delaymin = 20000;
-    unsigned long debutJeu = Microsecondes();
-    unsigned long suivant = Microsecondes() + CYCLE;
+    debutJeu = Microsecondes();
+    suivant = Microsecondes() + CYCLE;
+    
 
     Screen_Menu();
     srand(time(NULL));
@@ -234,6 +245,7 @@ int main() {
     Playground(snake, SnakeLength);
 
     while (go_on) {
+        char temps_str[15];
         EraseSnake(snake, SnakeLength);
         Apples_Random(Apples, &apples_number);
         Update_Score();
@@ -255,7 +267,15 @@ int main() {
         if (Microsecondes() > suivant) {
             suivant = Microsecondes() + CYCLE;
             Temps(PAUSE);
-        
+            temps = SecondesDepuisDebut();
+            ChoisirCouleurDessin(CouleurParNom("black"));
+            RemplirRectangle(20, 20, 200, 30);
+            sprintf(temps_str, "Temps: %lu s", temps);
+            ChoisirCouleurDessin(CouleurParNom("white"));
+            EcrireTexte(windowWidth - 150, windowHeight - 30, temps_str, 2);
+
+        }
+
         if (ToucheEnAttente() == 1) {
             switch (Touche()) {
                 case XK_Right:
@@ -352,9 +372,9 @@ int main() {
             }
         }
 
-        }
+        
     }
-
+ 
 
     free(snake);
     Touche();
