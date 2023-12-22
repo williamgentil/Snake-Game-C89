@@ -6,13 +6,14 @@
 
 #define delta 1000000L
 #define CYCLE 100000L
-#define MAX_LENGTH 200
+#define MAX_LENGTH 500
 #define PAUSE 100000L
 
-int windowWidth = 1100;
-int windowHeight = 600;
+int WindowWidth = 930;
+int WindowHeight = 750;
 int score = 0;
-unsigned long temps = 0;
+int minutes = 0;
+unsigned long seconds = 0;
 unsigned long debutJeu;
 unsigned long suivant;
 
@@ -26,10 +27,11 @@ typedef struct {
     int y;
 } Apple;
 
-void Temps(unsigned long us) {
+void Timer(unsigned long us) {
     unsigned long attente = Microsecondes() + us;
     while (Microsecondes() < attente) {}
 }
+
 unsigned long MicrosecondesDepuisDebut() {
     return Microsecondes() - debutJeu;
 }
@@ -43,17 +45,17 @@ void Init_Snake(SnakeCase snake[], int SnakeLength) {
     int x_middle = 60 / 2;
     int y_middle = 40 / 2;
     for (i = 0; i < SnakeLength; i++) {
-        snake[i].x = (x_middle - SnakeLength / 2 + i) * 20;
-        snake[i].y = y_middle * 20;
+        snake[i].x = (x_middle - SnakeLength / 2 + i) * 15;
+        snake[i].y = y_middle * 15;
     }   
 }
 
 int Screen_Menu() {
 
     InitialiserGraphique();
-    CreerFenetre(10, 10, 1100, 600);
-    ChargerImageFond("./snake-screenmenu.png");
-    ChargerImage("./green-arrow.png", 10, 420, 0, 0, 125, 70); /* not working */
+    CreerFenetre(10, 10, WindowWidth, WindowHeight);
+    ChargerImageFond("snake-screenmenu.png");
+    ChargerImage("green-arrow.png", 10, 420, 0, 0, 125, 70); /* not working */
 
 
     while (1) {
@@ -72,9 +74,9 @@ int Screen_Menu() {
 }
 
 int Background() {
-    int b_color = CouleurParComposante(140, 25, 0);
-    ChoisirCouleurDessin(b_color);
-    RemplirRectangle(0, 0, 1100, 600);
+    int back_color = CouleurParComposante(140, 25, 0);
+    ChoisirCouleurDessin(back_color);
+    RemplirRectangle(0, 0, WindowWidth, WindowHeight);
 }
 
 int Playground(SnakeCase snake[], int SnakeLength) {
@@ -82,23 +84,27 @@ int Playground(SnakeCase snake[], int SnakeLength) {
     int i;
     int couleur_serpent = CouleurParComposante(117, 253, 62);
     ChoisirCouleurDessin(black);
-    RemplirRectangle(20, 20, 700, 600);
+    RemplirRectangle(15, 15, 900, 600);
+    ChoisirCouleurDessin(couleur_serpent);
 
     for (i = 0; i < SnakeLength; i++) {
-        ChargerImage("./snake-head.png", snake[i].x, snake[i].y, 0, 0, 20, 20);
+        RemplirRectangle(snake[i].x, snake[i].y, 15, 15);
     }
 }
 
 void EraseSnake(SnakeCase snake[], int SnakeLength) {
     int i;
+    int black = CouleurParComposante(0, 0, 0); 
+    ChoisirCouleurDessin(black);
     for (i = 0; i < SnakeLength; i++) {
-        RemplirRectangle(snake[i].x, snake[i].y, 20, 20);
+        RemplirRectangle(snake[i].x, snake[i].y, 15, 15);
     }
 }
 
 
 void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
     int i;
+    int couleur_serpent = CouleurParComposante(117, 253, 62);
 
     EraseSnake(snake, SnakeLength);
     for (i = SnakeLength - 1; i > 0; i--) {
@@ -107,21 +113,21 @@ void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
 
     switch (direction) {
         case 1:
-            snake[0].x += 20; /* droite */
+            snake[0].x += 15; /* droite */
             break;
         case 2:
-            snake[0].x -= 20; /* gauche */
+            snake[0].x -= 15; /* gauche */
             break;
         case 3:
-            snake[0].y -= 20; /* Bas */
+            snake[0].y -= 15; /* Bas */
             break;
         case 4:
-            snake[0].y += 20; /* Haut */
+            snake[0].y += 15; /* Haut */
             break;
     }
-
+    ChoisirCouleurDessin(couleur_serpent);
     for (i = 0; i < SnakeLength; i++) {
-        ChargerImage("./snake-head.png", snake[i].x, snake[i].y, 0, 0, 20, 20);
+        RemplirRectangle(snake[i].x, snake[i].y, 15, 15);
     }
 }
 
@@ -147,10 +153,10 @@ void Apples_Random(Apple Apples[], int *apples_number) {
 
     while (*apples_number < 5) {
         Present = 0;
-        x = 20 + rand() % (700 - 2 * 20 - 20);
-        y = 20 + rand() % (600 - 2 * 20 - 20);
-        x = x - (x % 20);
-        y = y - (y % 20);
+        x = 15 + rand() % (700 - 2 * 15 - 15);
+        y = 15 + rand() % (600 - 2 * 15 - 15);
+        x = x - (x % 15);
+        y = y - (y % 15);
 
         for (j = 0; j < *apples_number; j++) {
             if (x == Apples[j].x && y == Apples[j].y) {
@@ -163,7 +169,7 @@ void Apples_Random(Apple Apples[], int *apples_number) {
             Apples[*apples_number].x = x;
             Apples[*apples_number].y = y;
             (*apples_number)++;
-            ChargerImage("./apple.png", x, y, 0, 0, 20, 20);
+            ChargerImage("apple.png", x, y, 0, 0, 15, 15);
         }
     }
 }
@@ -185,13 +191,15 @@ int Snake_Collision(int snake_x, int snake_y, int body_x, int body_y) { /* à in
 }
 
  int Apple_Eating(SnakeCase snake[], Apple Apples[], int *apples_number, int *SnakeLength) {
-    int i, j;
+    int i, j, back_color = CouleurParComposante(117, 253, 62);
     int head_x = snake[0].x;
     int head_y = snake[0].y;
 
     for (i = 0; i < *apples_number; i++) {
         if (Apple_Collision(head_x, head_y, Apples[i].x, Apples[i].y)) {
             for (j = *SnakeLength - 1; j > 0; j--) {
+                ChoisirCouleurDessin(back_color); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
+                RemplirRectangle(0, 0, 15, 15);
                 snake[j] = snake[j - 1];
             }
 
@@ -212,16 +220,16 @@ int Snake_Collision(int snake_x, int snake_y, int body_x, int body_y) { /* à in
 
 int Apples_Redraw(Apple Apples[], int apples_number) {
     int i;
-
     for (i = 0; i < apples_number; i++) {
-        ChargerImage("./apple.png", Apples[i].x, Apples[i].y, 0, 0, 20, 20);
+        ChargerImage("apple.png", Apples[i].x, Apples[i].y, 0, 0, 15, 15);
     }
 }
 
 void Update_Score() {
     char score_str[15];
-    sprintf(score_str, "Score: %d", score);
-    EcrireTexte(windowWidth- 150, windowHeight - 50, score_str, 2);
+    ChoisirCouleurDessin(CouleurParNom("black"));
+    sprintf(score_str, "Score: %06d", score);
+    EcrireTexte(WindowWidth- 200, WindowHeight - 100, score_str, 2);
 }
 
 int main() {
@@ -229,6 +237,7 @@ int main() {
     int Pause_Menu_Position = 0;
     int last_direction = 0;
     int SnakeLength = 10;
+    int back_color = CouleurParComposante(140, 25, 0);
     SnakeCase *snake = (SnakeCase *)malloc(MAX_LENGTH * sizeof(SnakeCase));
     Apple Apples[5];
     int apples_number = 0;
@@ -246,6 +255,8 @@ int main() {
 
     while (go_on) {
         char temps_str[15];
+        ChoisirCouleurDessin(back_color); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
+        RemplirRectangle(0, 0, 15, 15);
         EraseSnake(snake, SnakeLength);
         Apples_Random(Apples, &apples_number);
         Update_Score();
@@ -253,27 +264,26 @@ int main() {
         
         if (Apple_Eating(snake, Apples, &apples_number, &SnakeLength)) {
             SnakeLength += 2;
-            Background();
             Playground(snake, SnakeLength);
+            ChoisirCouleurDessin(back_color);
+            RemplirRectangle(825, 625, 100, 25);
             Apples_Redraw(Apples, apples_number);
         }
 
         MoveSnake(snake, direction, SnakeLength);
         last_direction = direction;
         if (Snake_Self_Collision(snake, SnakeLength)) {
-            printf("TEST!\n");
             go_on = 0; 
         }
         if (Microsecondes() > suivant) {
             suivant = Microsecondes() + CYCLE;
-            Temps(PAUSE);
-            temps = SecondesDepuisDebut();
+            Timer(PAUSE);
+            ChoisirCouleurDessin(back_color);
+            RemplirRectangle(50, 625, 50, 25);
+            seconds = SecondesDepuisDebut();
+            sprintf(temps_str, "%02lu:%02lu", minutes, seconds);
             ChoisirCouleurDessin(CouleurParNom("black"));
-            RemplirRectangle(20, 20, 200, 30);
-            sprintf(temps_str, "Temps: %lu s", temps);
-            ChoisirCouleurDessin(CouleurParNom("white"));
-            EcrireTexte(windowWidth - 150, windowHeight - 30, temps_str, 2);
-
+            EcrireTexte(25, WindowHeight - 100, temps_str, 2);
         }
 
         if (ToucheEnAttente() == 1) {
@@ -302,71 +312,85 @@ int main() {
                         direction = last_direction;
                     }
                     break;
-                case XK_space:
-                    ChargerImage("./pause-menu.png", 0, 0, 0, 0, 1100, 600);
-                    if (ToucheEnAttente() == 1) {
-                        switch (Touche()) {
-                            case XK_Down:
-                                if (Pause_Menu_Position == 0) {
-                                    ChargerImage("./green-arrow.png", 200, 300, 0, 0, 125, 70);/* mettre la position de la souris au niveau de resume */
-                                    Pause_Menu_Position = Pause_Menu_Position+1;
-                                    if (Touche() == XK_Return)
-                                    {
-                                        ChoisirEcran(0);
-                                    }
-                                    
-                                    }
-                                else if (Pause_Menu_Position == 1) {
-                                    SourisPosition(); /* mettre la position de la souris au niveau de bindings */
-                                    Pause_Menu_Position = Pause_Menu_Position+1;
-                                    if (Touche() == XK_Return) {
-                                        ChargerImageFond("./keybinds.png");
-                                    }
-                                }
-                                else if (Pause_Menu_Position == 2) {
-                                    SourisPosition(); /* mettre la position de la souris au niveau de leave */
-                                    Pause_Menu_Position = Pause_Menu_Position+1;
-                                    if (Touche() == XK_Return) 
-                                    {
-                                        return 0;
-                                    }
-                                    
-                                }
-                                break;
 
-                            case XK_Up:
-                                if (Pause_Menu_Position == 3) {
-                                    SourisPosition(); /* mettre la position de la souris au niveau de bindings */
-                                    Pause_Menu_Position = Pause_Menu_Position-1;
-                                    if (Touche() == XK_Return) {
-                                        ChargerImageFond("./keybinds.png");
-                                    }
-                                }
-                                else if (Pause_Menu_Position == 2) {
-                                    SourisPosition(); /* mettre la position de la souris au niveau de resume */
-                                    Pause_Menu_Position = Pause_Menu_Position-1;
-                                    if (Touche() == XK_Return)
-                                    {
-                                        ChoisirEcran(0);
-                                    }
-                                }
-                                break;
-
-
-
-                            case XK_space:
-                                ChoisirEcran(0); /* régler le problème pour avoir la fenêtre du jeu */
-                                break;
-
-                            case XK_Escape:
-                                return 0;
-                                break;
-                        }
-                    }
-                    break;
                 case XK_Escape:
                     return 0;
                     break;
+                case XK_space:
+                    ChargerImage("pause-menu.png", 0, 0, 0, 0, WindowWidth, WindowHeight);
+                    while (Touche() != XK_space) {
+                        go_on = 0;
+                        if (ToucheEnAttente() == 1) {
+                            switch (Touche()) {
+                                case XK_Down:
+                                    if (Pause_Menu_Position == 0) { /* resume */
+                                        ChargerImage("green-arrow.png", 200, 300, 0, 0, 125, 70); 
+                                        Pause_Menu_Position = Pause_Menu_Position+1;
+                                        if (Touche() == XK_Return)
+                                        {
+                                            Background();
+                                            Init_Snake(snake, SnakeLength);
+                                            Playground(snake, SnakeLength);
+                                            Apples[5];
+                                            go_on = 1;
+                                        }
+                                    
+                                        }
+                                    else if (Pause_Menu_Position == 1) { /* bindings */
+                                        Pause_Menu_Position = Pause_Menu_Position+1; 
+                                        if (Touche() == XK_Return) {
+                                            ChargerImageFond("keybinds.png");
+                                        }
+                                    }
+                                    else if (Pause_Menu_Position == 2) { /*leave */
+                                        Pause_Menu_Position = Pause_Menu_Position+1;
+                                        if (Touche() == XK_Return) 
+                                        {
+                                            return 0;
+                                        }
+                                    
+                                }
+                                break;
+
+                                case XK_Up:
+                                    if (Pause_Menu_Position == 3) { /* bindings */
+                                        Pause_Menu_Position = Pause_Menu_Position-1;
+                                        if (Touche() == XK_Return) {
+                                            ChargerImageFond("keybinds.png");
+                                        }
+                                    }
+                                    else if (Pause_Menu_Position == 2) { /* resume */
+                                        Pause_Menu_Position = Pause_Menu_Position-1;
+                                        if (Touche() == XK_Return)
+                                        {   
+                                            Background();
+                                            Init_Snake(snake, SnakeLength);
+                                            Playground(snake, SnakeLength);
+                                            Apples[5];
+                                            go_on = 1;
+                                        }
+                                    }
+                                    break;
+
+
+
+                                case XK_space:
+                                    Background();
+                                    Init_Snake(snake, SnakeLength);
+                                    Playground(snake, SnakeLength);
+                                    Apples[5];
+                                    go_on = 1;
+                                    break;
+
+                                case XK_Escape:
+                                    free(snake);
+                                    return 0;
+                                    break;
+                        }
+                    }
+                }
+                    break;
+                
 
                     
             }
