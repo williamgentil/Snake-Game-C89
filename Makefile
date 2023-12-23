@@ -1,28 +1,29 @@
-CC=gcc
-CFLAGS=-Wall -g
-LIBS=-lgraph
+# Variables
+ofiles = affichage.o apple.o game.o main.o snake.o
+flags = -ansi -pedantic 
 
-# Liste des fichiers sources
-SRCS=main.c snake.c apple.c obstacle.c graphics.c utils.c
+# Cibles
+run: snake
+	./snake
 
-# Liste des fichiers objets à générer
-OBJS=$(SRCS:.c=.o)
+snake: ${ofiles}
+	gcc ${flags} -o snake ${ofiles} -lgraph
+	
+affichage.o: snake.o apple.o
+	gcc ${flags} -c affichage.c
 
-# Nom de l'exécutable
-EXE=snake
+apple.o: snake.o 
+	gcc ${flags} -c apple.c
 
-# Règles de compilation pour chaque fichier objet
-%.o: %.c
-    $(CC) $(CFLAGS) -c $<
+game.o: 
+	gcc ${flags} -c game.c
 
+main.o: ${ofiles}
+	gcc ${flags} -c main.c
 
-# Règle principale pour générer l'exécutable
-$(EXE): $(OBJS)
-    $(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+snake.o:
+	gcc ${flags} -c snake.c
 
-# Règle pour nettoyer les fichiers objets et l'exécutable
 clean:
-    rm -f $(OBJS) $(EXE)
-
-# Déclaration de la règle clean comme but factice
-.PHONY: clean
+	rm snake
+	rm ${ofiles}
