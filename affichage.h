@@ -2,7 +2,7 @@
 #define AFFICHAGE_H
 #include "snake.h"
 
-int WindowWidth, WindowHeight;
+extern int WindowWidth, WindowHeight;
 
 int Screen_Menu();
 int Background();

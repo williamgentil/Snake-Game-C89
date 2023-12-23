@@ -3,10 +3,8 @@
 #include <stdio.h>
 #define CYCLE 100000L
 
-/* unsigned long debutJeu,suivant; */
-
-unsigned long int debutJeu = Microsecondes();
-unsigned long  int suivant = Microsecondes() + CYCLE;
+unsigned long debutJeu;
+unsigned long suivant;
 
 void Timer(unsigned long us) {
     unsigned long attente = Microsecondes() + us;
@@ -21,3 +19,19 @@ unsigned long SecondesDepuisDebut() {
     return MicrosecondesDepuisDebut() / 1000000L;
 }
 
+void debut(){
+    debutJeu = Microsecondes();
+    suivant = debutJeu + CYCLE;
+}
+
+unsigned long getsuivant(){
+   return suivant; 
+}
+
+void setsuivant(){
+    suivant = Microsecondes() + CYCLE;
+}
+
+unsigned long getdebutJeu(){
+    return debutJeu;
+}

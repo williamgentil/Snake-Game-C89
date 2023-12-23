@@ -24,9 +24,9 @@ int main() {
     int apples_number = 0;
     int delay = 80000;
     int delaymin = 20000;
-    debutJeu = Microsecondes();
-    suivant = Microsecondes() + CYCLE;
-    
+    unsigned long int minutes = 0;
+    unsigned long seconds = 0;
+
     Screen_Menu();
     srand(time(NULL));
     Background();
@@ -61,8 +61,8 @@ int main() {
 
         }
 
-        if (Microsecondes() > suivant) {
-            suivant = Microsecondes() + CYCLE;
+        if (Microsecondes() > getsuivant()) {
+            setsuivant();
             Timer(PAUSE);
             ChoisirCouleurDessin(back_color);
             RemplirRectangle(50, 625, 50, 25);

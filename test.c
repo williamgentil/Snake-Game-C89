@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <graph.h>
-#include <time.h>
+#include <time.h> 
 
 #define delta 1000000L
 #define CYCLE 100000L

@@ -1,9 +1,6 @@
 #include "snake.h"
+#include <graph.h>
 
-typedef struct {
-    int x;
-    int y;
-} SnakeCase;
 
 
 void Init_Snake(SnakeCase snake[], int SnakeLength) {

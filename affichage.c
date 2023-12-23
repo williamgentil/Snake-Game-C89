@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "snake.h"
+#include "apple.h"
 
-extern int score;
 int WindowWidth = 930;
 int WindowHeight = 750;
 

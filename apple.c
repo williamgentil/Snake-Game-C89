@@ -1,9 +1,10 @@
 #include "apple.h"
+#include "snake.h"
+#include <graph.h>
+#include <time.h>
+#include <stdlib.h>
 
-typedef struct {
-    int x;
-    int y;
-} Apple;
+int score;
 
 void Apples_Random(Apple Apples[], int *apples_number) {
     int i, x, y, j;
