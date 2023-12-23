@@ -9,9 +9,9 @@
 #define PAUSE 100000L
 
 int WindowWidth = 930;
-int WindowHeight = 700;
+int WindowHeight = 750;
 int score = 0;
-int minutes = 0;
+unsigned long int minutes = 0;
 unsigned long seconds = 0;
 unsigned long debutJeu;
 unsigned long suivant;
@@ -92,6 +92,7 @@ void EraseSnake(SnakeCase snake[], int SnakeLength) {
 }
 void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
     int i;
+    int tempsecoule = 2 ;
     int couleur_serpent = CouleurParComposante(117, 253, 62);
     EraseSnake(snake, SnakeLength);
     for (i = SnakeLength - 1; i > 0; i--) {
@@ -99,16 +100,16 @@ void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
     }
     switch (direction) {
         case 1:
-            snake[0].x += 15; /* droite */
+            snake[0].x += 15* tempsecoule; /* droite */
             break;
         case 2:
-            snake[0].x -= 15; /* gauche */
+            snake[0].x -= 15 * tempsecoule; /* gauche */
             break;
         case 3:
-            snake[0].y -= 15; /* Bas */
+            snake[0].y -= 15 * tempsecoule; /* Bas */
             break;
         case 4:
-            snake[0].y += 15; /* Haut */
+            snake[0].y += 15 * tempsecoule; /* Haut */
             break;
     }
     ChoisirCouleurDessin(couleur_serpent);
@@ -116,12 +117,6 @@ void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
         RemplirRectangle(snake[i].x, snake[i].y, 15, 15);
     }
 }
-
-int Snake_Collision(int snake_x, int snake_y, int body_x, int body_y) { /* à init */
-
-    return snake_x == body_x && snake_y == body_y; 
-}
-
 int Snake_Self_Collision(SnakeCase snake[], int SnakeLength) {
     int i;
     int head_x = snake[0].x;
@@ -165,6 +160,9 @@ int Apple_Collision(int snake_x, int snake_y, int apple_x, int apple_y) {
     return snake_x == apple_x && snake_y == apple_y;
 }
 
+int Snake_Collision(int snake_x, int snake_y, int body_x, int body_y) { /* à init */
+    return snake_x == body_x && snake_y == body_y; 
+}
  int Apple_Eating(SnakeCase snake[], Apple Apples[], int *apples_number, int *SnakeLength) {
     int i, j, back_color = CouleurParComposante(117, 253, 62);
     int head_x = snake[0].x;
@@ -199,7 +197,7 @@ void Update_Score() {
     char score_str[15];
     ChoisirCouleurDessin(CouleurParNom("black"));
     sprintf(score_str, "Score: %06d", score);
-    EcrireTexte(WindowWidth- 210, WindowHeight - 50, score_str, 2);
+    EcrireTexte(WindowWidth- 200, WindowHeight - 100, score_str, 2);
 }
 
 void GameOverScreen() {
@@ -267,7 +265,7 @@ int main() {
             seconds = SecondesDepuisDebut();
             sprintf(temps_str, "%02lu:%02lu", minutes, seconds);
             ChoisirCouleurDessin(CouleurParNom("black"));
-            EcrireTexte(25, WindowHeight - 50, temps_str, 2);
+            EcrireTexte(25, WindowHeight - 100, temps_str, 2);
         }
         if (ToucheEnAttente() == 1) {
             switch (Touche()) {
@@ -299,7 +297,7 @@ int main() {
                     return 0;
                     break;
                 case XK_space:
-                    ChargerImage("pause-menu.png", WindowWidth/2 - 150, WindowHeight/2 - 250,0,0,WindowWidth, WindowHeight);
+                    ChargerImage("pause-menu.png", 0, 0, 0, 0, WindowWidth, WindowHeight);
                     while (Touche() != XK_space) {
                         go_on = 0;
                         if (ToucheEnAttente() == 1) {
@@ -357,10 +355,8 @@ int main() {
                                     Init_Snake(snake, SnakeLength);
                                     Playground(snake, SnakeLength);
                                     Apples[5];
-                                    Apples_Redraw(Apples, apples_number);
                                     go_on = 1;
                                     break;
-
                                 case XK_Escape:
                                     free(snake);
                                     return 0;

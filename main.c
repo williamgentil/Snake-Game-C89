@@ -3,25 +3,15 @@
 #include <graph.h>
 #include <time.h>
 
-#include "snake.h"
+#include "affichage.h"
 #include "apple.h"
-#include "obstacle.h"
-#include "graphics.h"
-#include "utils.h"
+#include "game.h"
+#include "snake.h"
 
+#define delta 1000000L
 #define CYCLE 100000L
+#define MAX_LENGTH 500
 #define PAUSE 100000L
-
-
-
-int WindowWidth = 930;
-int WindowHeight = 750;
-int score = 0;
-unsigned long int minutes = 0;
-unsigned long seconds = 0;
-unsigned long debutJeu;
-unsigned long suivant;
-
 
 int main() {
     int direction = 2, go_on = 1;
@@ -37,13 +27,11 @@ int main() {
     debutJeu = Microsecondes();
     suivant = Microsecondes() + CYCLE;
     
-
     Screen_Menu();
     srand(time(NULL));
     Background();
     Init_Snake(snake, SnakeLength);
     Playground(snake, SnakeLength);
-
     while (go_on) {
         char temps_str[15];
         ChoisirCouleurDessin(back_color); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
@@ -60,12 +48,19 @@ int main() {
             RemplirRectangle(825, 625, 100, 25);
             Apples_Redraw(Apples, apples_number);
         }
-
         MoveSnake(snake, direction, SnakeLength);
         last_direction = direction;
-        if (Snake_Self_Collision(snake, SnakeLength)) {
-            go_on = 0; 
+
+        if (snake[0].x < 15 || snake[0].x >= 900 || snake[0].y < 15 || snake[0].y >= 600) {
+            go_on = 0;
         }
+
+         if (Snake_Self_Collision(snake, SnakeLength) || Snake_OutOfBounds(snake[0].x, snake[0].y)) {
+            go_on = 0;
+            GameOverScreen();
+
+        }
+
         if (Microsecondes() > suivant) {
             suivant = Microsecondes() + CYCLE;
             Timer(PAUSE);
@@ -76,7 +71,6 @@ int main() {
             ChoisirCouleurDessin(CouleurParNom("black"));
             EcrireTexte(25, WindowHeight - 100, temps_str, 2);
         }
-
         if (ToucheEnAttente() == 1) {
             switch (Touche()) {
                 case XK_Right:
@@ -103,7 +97,6 @@ int main() {
                         direction = last_direction;
                     }
                     break;
-
                 case XK_Escape:
                     return 0;
                     break;
@@ -142,7 +135,6 @@ int main() {
                                     
                                 }
                                 break;
-
                                 case XK_Up:
                                     if (Pause_Menu_Position == 3) { /* bindings */
                                         Pause_Menu_Position = Pause_Menu_Position-1;
@@ -162,9 +154,6 @@ int main() {
                                         }
                                     }
                                     break;
-
-
-
                                 case XK_space:
                                     Background();
                                     Init_Snake(snake, SnakeLength);
@@ -172,7 +161,6 @@ int main() {
                                     Apples[5];
                                     go_on = 1;
                                     break;
-
                                 case XK_Escape:
                                     free(snake);
                                     return 0;
@@ -182,15 +170,12 @@ int main() {
                 }
                     break;
                 
-
                     
             }
         }
-
         
     }
  
-
     free(snake);
     Touche();
     FermerGraphique();
