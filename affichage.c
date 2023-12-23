@@ -55,7 +55,12 @@ void GameOverScreen() {
 
 void Update_Score() {
     char score_str[15];
+    int back_color = CouleurParComposante(140, 25, 0);
+
+    ChoisirCouleurDessin(back_color);
+    RemplirRectangle(WindowWidth - 200, WindowHeight - 120, 150, 50);
+
     ChoisirCouleurDessin(CouleurParNom("black"));
     sprintf(score_str, "Score: %06d", score);
-    EcrireTexte(WindowWidth- 200, WindowHeight - 100, score_str, 2);
+    EcrireTexte(WindowWidth - 200, WindowHeight - 100, score_str, 2);
 }

@@ -5,6 +5,7 @@ extern unsigned long debutJeu;
 extern unsigned long suivant;
 
 void Timer(unsigned long us);
+void AfficherTemps(unsigned long tempsDebut);
 unsigned long MicrosecondesDepuisDebut();
 unsigned long SecondesDepuisDebut();
 void debut();
