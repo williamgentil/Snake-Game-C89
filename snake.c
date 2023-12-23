@@ -23,7 +23,6 @@ void EraseSnake(SnakeCase snake[], int SnakeLength) {
 }
 void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
     int i;
-    int tempsecoule = 2 ;
     int couleur_serpent = CouleurParComposante(117, 253, 62);
     EraseSnake(snake, SnakeLength);
     for (i = SnakeLength - 1; i > 0; i--) {
@@ -31,16 +30,16 @@ void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
     }
     switch (direction) {
         case 1:
-            snake[0].x += 15* tempsecoule; /* droite */
+            snake[0].x += 15; /* droite */
             break;
         case 2:
-            snake[0].x -= 15 * tempsecoule; /* gauche */
+            snake[0].x -= 15; /* gauche */
             break;
         case 3:
-            snake[0].y -= 15 * tempsecoule; /* Bas */
+            snake[0].y -= 15; /* Bas */
             break;
         case 4:
-            snake[0].y += 15 * tempsecoule; /* Haut */
+            snake[0].y += 15; /* Haut */
             break;
     }
     ChoisirCouleurDessin(couleur_serpent);

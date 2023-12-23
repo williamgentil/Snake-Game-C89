@@ -1,8 +1,9 @@
 # Variables
 ofiles = affichage.o apple.o game.o main.o snake.o
+fonctions = affichage.o apple.o game.o snake.o
 flags = -ansi -pedantic 
 
-# Cibles
+# BUTS
 run: snake
 	./snake
 
@@ -18,7 +19,7 @@ apple.o: snake.o
 game.o: 
 	gcc ${flags} -c game.c
 
-main.o: ${ofiles}
+main.o: ${fonctions}
 	gcc ${flags} -c main.c
 
 snake.o:
