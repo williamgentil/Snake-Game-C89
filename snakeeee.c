@@ -381,7 +381,7 @@ int main() {
                                     Apples[5];
                                     go_on = 1;
                                     break;
-                                    
+
                                 case XK_Escape:
                                     free(snake);
                                     return 0;
