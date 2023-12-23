@@ -10,7 +10,7 @@
 #define PAUSE 100000L
 
 int WindowWidth = 930;
-int WindowHeight = 750;
+int WindowHeight = 700;
 int score = 0;
 int minutes = 0;
 unsigned long seconds = 0;
@@ -229,7 +229,7 @@ void Update_Score() {
     char score_str[15];
     ChoisirCouleurDessin(CouleurParNom("black"));
     sprintf(score_str, "Score: %06d", score);
-    EcrireTexte(WindowWidth- 200, WindowHeight - 100, score_str, 2);
+    EcrireTexte(WindowWidth- 210, WindowHeight - 50, score_str, 2);
 }
 
 int main() {
@@ -283,7 +283,7 @@ int main() {
             seconds = SecondesDepuisDebut();
             sprintf(temps_str, "%02lu:%02lu", minutes, seconds);
             ChoisirCouleurDessin(CouleurParNom("black"));
-            EcrireTexte(25, WindowHeight - 100, temps_str, 2);
+            EcrireTexte(25, WindowHeight - 50, temps_str, 2);
         }
 
         if (ToucheEnAttente() == 1) {
@@ -317,7 +317,7 @@ int main() {
                     return 0;
                     break;
                 case XK_space:
-                    ChargerImage("pause-menu.png", 0, 0, 0, 0, WindowWidth, WindowHeight);
+                    ChargerImage("pause-menu.png", WindowWidth/2 - 150, WindowHeight/2 - 250, 0, 0, WindowWidth, WindowHeight);
                     while (Touche() != XK_space) {
                         go_on = 0;
                         if (ToucheEnAttente() == 1) {
@@ -328,11 +328,7 @@ int main() {
                                         Pause_Menu_Position = Pause_Menu_Position+1;
                                         if (Touche() == XK_Return)
                                         {
-                                            Background();
-                                            Init_Snake(snake, SnakeLength);
-                                            Playground(snake, SnakeLength);
-                                            Apples[5];
-                                            go_on = 1;
+                                            
                                         }
                                     
                                         }
@@ -363,10 +359,8 @@ int main() {
                                         Pause_Menu_Position = Pause_Menu_Position-1;
                                         if (Touche() == XK_Return)
                                         {   
-                                            Background();
-                                            Init_Snake(snake, SnakeLength);
                                             Playground(snake, SnakeLength);
-                                            Apples[5];
+                                            Apples_Redraw(Apples, apples_number);
                                             go_on = 1;
                                         }
                                     }
@@ -375,10 +369,8 @@ int main() {
 
 
                                 case XK_space:
-                                    Background();
-                                    Init_Snake(snake, SnakeLength);
                                     Playground(snake, SnakeLength);
-                                    Apples[5];
+                                    Apples_Redraw(Apples, apples_number);
                                     go_on = 1;
                                     break;
 
