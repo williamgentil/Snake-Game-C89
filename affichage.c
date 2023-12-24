@@ -46,11 +46,16 @@ int Playground(SnakeCase snake[], int SnakeLength) {
 }
 
 void GameOverScreen() {
-    ChargerImageFond("gameover.png"); /* à changer */
-    /*
-    EcrireTexte(350, 600, "Game Over", 2);  
-    EcrireTexte(300, 650, "Appuyez sur Echap pour quitter", 2); */
-    while (Touche() != XK_Escape) {} 
+    ChargerImageFond("gameover.png");
+    switch (Touche()) {
+        case XK_space : 
+            ChoisirEcran(0);    
+            break;
+        
+        case XK_Escape : 
+            return;
+            break;
+    }
 }
 
 void Update_Score() {

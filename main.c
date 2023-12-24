@@ -15,8 +15,8 @@
 #define PAUSE 100000L
 
 int main() {
-    Rock obstacles[50]; 
-    int nb_obstacles = 50;
+    Rock obstacles[75]; 
+    int nb_obstacles = 75;
     int direction = 2, go_on = 1;
     int Pause_Menu_Position = 0;
     int last_direction = 0;
@@ -35,12 +35,14 @@ int main() {
     Background();
     Init_Snake(snake, SnakeLength);
     Playground(snake, SnakeLength);
+    Apples_Redraw(Apples, apples_number);
     Rock_Random(obstacles, &nb_obstacles);
 
   
 
     while (go_on) {
         char temps_str[15];
+        char score_str[15];
         ChoisirCouleurDessin(back_color); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
         RemplirRectangle(0, 0, 15, 15);
         EraseSnake(snake, SnakeLength);
@@ -68,8 +70,10 @@ int main() {
 
         }
 
+        Playground(snake, SnakeLength);
+        Apples_Redraw(Apples, apples_number);
         MoveRocks(obstacles, nb_obstacles);
-
+        
        if (Snake_Obstacle_Collision(snake, SnakeLength, obstacles, nb_obstacles)) {
  
             go_on = 0;
@@ -82,7 +86,7 @@ int main() {
             ChoisirCouleurDessin(back_color);
             RemplirRectangle(50, 625, 50, 25);
             seconds = SecondesDepuisDebut();
-            sprintf(temps_str, "%02lu:%02lu", minutes, seconds);
+            sprintf(temps_str, "%02lu s", seconds);
             ChoisirCouleurDessin(CouleurParNom("black"));
             EcrireTexte(25, WindowHeight - 100, temps_str, 2);
         }
@@ -118,63 +122,16 @@ int main() {
                     break;
                 case XK_space:
                     ChargerImage("pause-menu.png", WindowWidth/2 - 150, WindowHeight/2 -250, 0, 0, 930, 750);
+                    sprintf(temps_str, "%02lu s", seconds);
+                    ChoisirCouleurDessin(CouleurParNom("white"));
+                    EcrireTexte(WindowWidth/2 + 50, WindowHeight/2 - 100, temps_str, 1);
+                    sprintf(score_str, "%06d", score);
+                    EcrireTexte(WindowWidth/2 - 80, WindowHeight/2 - 100, score_str, 1);
                     while (Touche() != XK_space) {
                         go_on = 0;
                         if (ToucheEnAttente() == 1) {
                             switch (Touche()) {
-                                case XK_Down:
-                                    if (Pause_Menu_Position == 0) { /* resume */
-                                        ChargerImage("green-arrow.png", 200, 300, 0, 0, 125, 70); 
-                                        Pause_Menu_Position = Pause_Menu_Position+1;
-                                        if (Touche() == XK_Return)
-                                        {
-                                            Background();
-                                            Init_Snake(snake, SnakeLength);
-                                            Playground(snake, SnakeLength);
-                                            Apples[5];
-                                            go_on = 1;
-                                        }
-                                    
-                                        }
-                                    else if (Pause_Menu_Position == 1) { /* bindings */
-                                        Pause_Menu_Position = Pause_Menu_Position+1; 
-                                        if (Touche() == XK_Return) {
-                                            ChargerImageFond("keybinds.png");
-                                        }
-                                    }
-                                    else if (Pause_Menu_Position == 2) { /*leave */
-                                        Pause_Menu_Position = Pause_Menu_Position+1;
-                                        if (Touche() == XK_Return) 
-                                        {
-                                            return 0;
-                                        }
-                                    
-                                }
-                                break;
-                                case XK_Up:
-                                    if (Pause_Menu_Position == 3) { /* bindings */
-                                        Pause_Menu_Position = Pause_Menu_Position-1;
-                                        if (Touche() == XK_Return) {
-                                            ChargerImageFond("keybinds.png");
-                                        }
-                                    }
-                                    else if (Pause_Menu_Position == 2) { /* resume */
-                                        Pause_Menu_Position = Pause_Menu_Position-1;
-                                        if (Touche() == XK_Return)
-                                        {   
-                                            Background();
-                                            Init_Snake(snake, SnakeLength);
-                                            Playground(snake, SnakeLength);
-                                            Apples[5];
-                                            go_on = 1;
-                                        }
-                                    }
-                                    break;
                                 case XK_space:
-                                    Background();
-                                    Init_Snake(snake, SnakeLength);
-                                    Playground(snake, SnakeLength);
-                                    Apples[5];
                                     go_on = 1;
                                     break;
                                 case XK_Escape:

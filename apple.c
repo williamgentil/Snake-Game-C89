@@ -11,7 +11,7 @@ void Apples_Random(Apple Apples[], int *apples_number) {
     int Present = 0;
     while (*apples_number < 5) {
         Present = 0;
-        x = 15 + rand() % (700 - 2 * 15 - 15);
+        x = 15 + rand() % (900 - 2 * 15 - 15);
         y = 15 + rand() % (600 - 2 * 15 - 15);
         x = x - (x % 15);
         y = y - (y % 15);
@@ -40,7 +40,7 @@ int Apple_Eating(SnakeCase snake[], Apple Apples[], int *apples_number, int *Sna
     for (i = 0; i < *apples_number; i++) {
         if (Apple_Collision(head_x, head_y, Apples[i].x, Apples[i].y)) {
             for (j = *SnakeLength - 1; j > 0; j--) {
-                ChoisirCouleurDessin(colorback_); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
+                ChoisirCouleurDessin(back_color); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
                 RemplirRectangle(0, 0, 15, 15);
                 snake[j] = snake[j - 1];
             }
