@@ -101,7 +101,7 @@ int main() {
                     return 0;
                     break;
                 case XK_space:
-                    ChargerImage("pause-menu.png", 0, 0, 0, 0, WindowWidth, WindowHeight);
+                    ChargerImage("pause-menu.png", WindowWidth/2 - 150, WindowHeight/2 -250, 0, 0, 930, 750);
                     while (Touche() != XK_space) {
                         go_on = 0;
                         if (ToucheEnAttente() == 1) {
