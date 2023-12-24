@@ -7,6 +7,7 @@
 #include "apple.h"
 #include "game.h"
 #include "snake.h"
+#include "obstacle.h"
 
 #define delta 1000000L
 #define CYCLE 100000L
@@ -14,6 +15,8 @@
 #define PAUSE 100000L
 
 int main() {
+    Rock obstacles[50]; 
+    int nb_obstacles = 50;
     int direction = 2, go_on = 1;
     int Pause_Menu_Position = 0;
     int last_direction = 0;
@@ -32,6 +35,10 @@ int main() {
     Background();
     Init_Snake(snake, SnakeLength);
     Playground(snake, SnakeLength);
+    Rock_Random(obstacles, &nb_obstacles);
+
+  
+
     while (go_on) {
         char temps_str[15];
         ChoisirCouleurDessin(back_color); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
@@ -61,6 +68,14 @@ int main() {
 
         }
 
+        MoveRocks(obstacles, nb_obstacles);
+
+       if (Snake_Obstacle_Collision(snake, SnakeLength, obstacles, nb_obstacles)) {
+ 
+            go_on = 0;
+            GameOverScreen();
+        }
+
         if (Microsecondes() > getsuivant()) {
             setsuivant();
             Timer(PAUSE);
@@ -71,6 +86,7 @@ int main() {
             ChoisirCouleurDessin(CouleurParNom("black"));
             EcrireTexte(25, WindowHeight - 100, temps_str, 2);
         }
+    
         if (ToucheEnAttente() == 1) {
             switch (Touche()) {
                 case XK_Right:

@@ -40,7 +40,7 @@ int Apple_Eating(SnakeCase snake[], Apple Apples[], int *apples_number, int *Sna
     for (i = 0; i < *apples_number; i++) {
         if (Apple_Collision(head_x, head_y, Apples[i].x, Apples[i].y)) {
             for (j = *SnakeLength - 1; j > 0; j--) {
-                ChoisirCouleurDessin(back_color); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
+                ChoisirCouleurDessin(colorback_); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
                 RemplirRectangle(0, 0, 15, 15);
                 snake[j] = snake[j - 1];
             }

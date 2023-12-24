@@ -1,50 +1,56 @@
 #include "obstacle.h"
+#include <graph.h>
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-void poule_random(Poule Poules []) {
-    int nbpoule, i, Present;
-    while (i < nbpoule) {
+int back_color;
+
+void Rock_Random(Rock Rocks[], int *nbrock) {
+    int i = 0;
+    int x, y, j, Present;
+
+    while (i < *nbrock) {
         Present = 0;
         x = 15 + rand() % (700 - 2 * 15 - 15);
         y = 15 + rand() % (600 - 2 * 15 - 15);
         x = x - (x % 15);
         y = y - (y % 15);
-        for (j = 0; j < nbpoule; j++) {
-            if (x == Apples[j].x && y == Apples[j].y) {
+
+        j = 0;
+        while (j < i) {
+            if (x == Rocks[j].x && y == Rocks[j].y) {
                 Present = 1;
                 break;
             }
+            j++;
         }
+
         if (!Present) {
-            Apples[nbpoule].x = x;
-            Apples[nbpoule].y = y;
-            ChargerImage("apple.png", x, y, 0, 0, 15, 15);
+            Rocks[i].x = x;
+            Rocks[i].y = y;
+            ChargerImage("rock.png", x, y, 0, 0, 15, 15);
+            i++;
         }
     }
 }
 
-void MoovePoule(Poule [] tableau) {
-    int tailletab = sizeof(tableau) / sizeof(Poule);
-    ChoisirCouleurDessin(back_color);
-    for (int i = 0 ; i < tailletab ; i++ ){
-        RemplirRectangl e(Poule[i].x, Poule[i].y, 15, 15);
-    }
-    
-    
-    switch (direction) {
-        case 1:
-            snake[0].x += 15; /* droite */
-            break;
-        case 2:
-            snake[0].x -= 15; /* gauche */
-            break;
-        case 3:
-            snake[0].y -= 15; /* Bas */
-            break;
-        case 4:
-            snake[0].y += 15; /* Haut */
-            break;
-        case default:
-            snake[0].x += 15; 
-            snake[0].y += 15;
+void MoveRocks(Rock Rocks[], int nbrock) {
+    int i;
+    for (i = 0; i < nbrock; i++) {
+        ChargerImage("rock.png",Rocks[i].x, Rocks[i].y, 0, 0, 15, 15);
+       
     }
 }
+
+int Snake_Obstacle_Collision(SnakeCase snake[], int length, Rock Rocks[], int nbrock) {
+    int i;
+    for (i = 0; i < nbrock; i++) {
+        if (snake[0].x == Rocks[i].x && snake[0].y == Rocks[i].y) {
+            return 1; 
+        }
+        
+    }
+    return EXIT_SUCCESS;
+}
+
