@@ -6,6 +6,8 @@
 
 int score;
 
+
+/* Génère des pommes aléatoires sur le terrain */
 void Apples_Random(Apple Apples[], int *apples_number) {
     int i, x, y, j;
     int Present = 0;
@@ -29,9 +31,15 @@ void Apples_Random(Apple Apples[], int *apples_number) {
         }
     }
 }
+
+/* Vérifie la collision entre la tête du serpent et une pomme */
+
 int Apple_Collision(int snake_x, int snake_y, int apple_x, int apple_y) {
     return snake_x == apple_x && snake_y == apple_y;
 }
+
+
+/* Traite la collision entre le serpent et une pomme */
 
 int Apple_Eating(SnakeCase snake[], Apple Apples[], int *apples_number, int *SnakeLength) {
     int i, j, back_color = CouleurParComposante(117, 253, 62);
@@ -57,6 +65,9 @@ int Apple_Eating(SnakeCase snake[], Apple Apples[], int *apples_number, int *Sna
     }
     return 0;
 } 
+
+/* Réaffiche toutes les pommes sur le terrain */
+
 int Apples_Redraw(Apple Apples[], int apples_number) {
     int i;
     for (i = 0; i < apples_number; i++) {

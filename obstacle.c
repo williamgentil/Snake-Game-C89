@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 int back_color;
-
+/* Génère des rochers aléatoires sur le terrain */
 void Rock_Random(Rock Rocks[], int *nbrock) {
     int i = 0;
     int x, y, j, Present;
@@ -42,7 +42,7 @@ void MoveRocks(Rock Rocks[], int nbrock) {
        
     }
 }
-
+/*  Vérifie la collision entre le serpent et un rocher */
 int Snake_Obstacle_Collision(SnakeCase snake[], int length, Rock Rocks[], int nbrock) {
     int i;
     for (i = 0; i < nbrock; i++) {

@@ -7,7 +7,7 @@ extern int WindowWidth, WindowHeight;
 int Screen_Menu();
 int Background();
 int Playground(SnakeCase snake[], int SnakeLength);
-void GameOverScreen();
+int GameOverScreen();
 void Update_Score();
 
 #endif

@@ -27,7 +27,7 @@ int main() {
     int apples_number = 0;
     int delay = 80000;
     int delaymin = 20000;
-    unsigned long int minutes = 0;
+    unsigned long minutes = 0;
     unsigned long seconds = 0;
 
     Screen_Menu();
@@ -39,11 +39,11 @@ int main() {
     Rock_Random(obstacles, &nb_obstacles);
 
   
-
+    /* Boucle principale du jeu */
     while (go_on) {
-        char temps_str[15];
+        char temps_str[100];
         char score_str[15];
-        ChoisirCouleurDessin(back_color); /* permet de corriger partiellement le bug du pixel en x=0, y=0 */
+        ChoisirCouleurDessin(back_color); 
         RemplirRectangle(0, 0, 15, 15);
         EraseSnake(snake, SnakeLength);
         Apples_Random(Apples, &apples_number);
@@ -101,17 +101,17 @@ int main() {
     }
         }
 
-        if (Microsecondes() > getsuivant()) {
-            setsuivant();
+        if (Microsecondes() > suivant) {
+            suivant = Microsecondes() + CYCLE;
             Timer(PAUSE);
             ChoisirCouleurDessin(back_color);
             RemplirRectangle(50, 625, 50, 25);
             seconds = SecondesDepuisDebut();
-            sprintf(temps_str, "%02lu s", seconds);
+            sprintf(temps_str, "%02lu:%02lu", minutes, seconds);
             ChoisirCouleurDessin(CouleurParNom("black"));
             EcrireTexte(25, WindowHeight - 100, temps_str, 2);
         }
-    
+    /*  Gestion des événements (touches, pause, etc.) */
         if (ToucheEnAttente() == 1) {
             switch (Touche()) {
                 case XK_Right:

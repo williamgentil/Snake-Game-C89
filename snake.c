@@ -2,7 +2,7 @@
 #include <graph.h>
 
 
-
+/* Initialise le serpent avec une longueur initiale */
 void Init_Snake(SnakeCase snake[], int SnakeLength) {
     int i;
     int x_middle = 60 / 2;
@@ -13,6 +13,9 @@ void Init_Snake(SnakeCase snake[], int SnakeLength) {
     }   
 }
 
+
+/* Efface le serpent du terrain */
+
 void EraseSnake(SnakeCase snake[], int SnakeLength) {
     int i;
     int black = CouleurParComposante(0, 0, 0); 
@@ -21,6 +24,10 @@ void EraseSnake(SnakeCase snake[], int SnakeLength) {
         RemplirRectangle(snake[i].x, snake[i].y, 15, 15);
     }
 }
+
+
+/* Déplace le serpent en fonction de la direction donnée */
+
 void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
     int i;
     int couleur_serpent = CouleurParComposante(117, 253, 62);
@@ -48,6 +55,8 @@ void MoveSnake(SnakeCase snake[], int direction, int SnakeLength) {
     }
 }
 
+
+/* Vérifie la collision du serpent avec lui-même */
 int Snake_Self_Collision(SnakeCase snake[], int SnakeLength) {
     int i;
     int head_x = snake[0].x;
@@ -59,10 +68,15 @@ int Snake_Self_Collision(SnakeCase snake[], int SnakeLength) {
     }
     return 0;
 }
+/* Vérifie si le serpent est en dehors des limites du terrain */
+
 
 int Snake_OutOfBounds(int snake_x, int snake_y) {
     return snake_x < 15 || snake_x >= 900 || snake_y < 15 || snake_y >= 600;
 }
+
+/* Vérifie la collision entre la tête du serpent et une partie de son corps */
+
 
 int Snake_Collision(int snake_x, int snake_y, int body_x, int body_y) {
     return snake_x == body_x && snake_y == body_y; 
