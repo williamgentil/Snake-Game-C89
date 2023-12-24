@@ -64,6 +64,6 @@ int Snake_OutOfBounds(int snake_x, int snake_y) {
     return snake_x < 15 || snake_x >= 900 || snake_y < 15 || snake_y >= 600;
 }
 
-int Snake_Collision(int snake_x, int snake_y, int body_x, int body_y) { /* à init */
+int Snake_Collision(int snake_x, int snake_y, int body_x, int body_y) {
     return snake_x == body_x && snake_y == body_y; 
 }

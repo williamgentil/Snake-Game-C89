@@ -47,15 +47,6 @@ int Playground(SnakeCase snake[], int SnakeLength) {
 
 void GameOverScreen() {
     ChargerImageFond("gameover.png");
-    switch (Touche()) {
-        case XK_space : 
-            ChoisirEcran(0);    
-            break;
-        
-        case XK_Escape : 
-            return;
-            break;
-    }
 }
 
 void Update_Score() {
@@ -63,9 +54,16 @@ void Update_Score() {
     int back_color = CouleurParComposante(140, 25, 0);
 
     ChoisirCouleurDessin(back_color);
-    RemplirRectangle(WindowWidth - 200, WindowHeight - 120, 150, 50);
+    RemplirRectangle(WindowWidth - 230, WindowHeight - 120, 150, 50);
 
     ChoisirCouleurDessin(CouleurParNom("black"));
     sprintf(score_str, "Score: %06d", score);
-    EcrireTexte(WindowWidth - 200, WindowHeight - 100, score_str, 2);
+    EcrireTexte(WindowWidth - 210, WindowHeight - 100, score_str, 2);
+}
+
+void Keys() {
+    ChargerImage("escape-key.png", 25, WindowHeight-75, 0, 0, 200, 45);
+    ChargerImage("spacebar-key.png", 270, WindowHeight-75, 0, 0, 383, 45);
+    ChargerImage("arrows.png", 700, WindowHeight-75, 0, 0, 196, 45);
+
 }

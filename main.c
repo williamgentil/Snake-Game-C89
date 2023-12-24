@@ -15,8 +15,8 @@
 #define PAUSE 100000L
 
 int main() {
-    Rock obstacles[75]; 
-    int nb_obstacles = 75;
+    Rock obstacles[50]; 
+    int nb_obstacles = 50;
     int direction = 2, go_on = 1;
     int Pause_Menu_Position = 0;
     int last_direction = 0;
@@ -48,17 +48,21 @@ int main() {
         EraseSnake(snake, SnakeLength);
         Apples_Random(Apples, &apples_number);
         Update_Score();
-            
+        Playground(snake, SnakeLength);
+        Apples_Redraw(Apples, apples_number);
+        MoveRocks(obstacles, nb_obstacles);
+        Keys();
         
         if (Apple_Eating(snake, Apples, &apples_number, &SnakeLength)) {
             SnakeLength += 2;
             Playground(snake, SnakeLength);
             ChoisirCouleurDessin(back_color);
-            RemplirRectangle(825, 625, 100, 25);
+            RemplirRectangle(WindowWidth - 120, WindowHeight - 130, 150, 50);
             Apples_Redraw(Apples, apples_number);
         }
         MoveSnake(snake, direction, SnakeLength);
         last_direction = direction;
+
 
         if (snake[0].x < 15 || snake[0].x >= 900 || snake[0].y < 15 || snake[0].y >= 600) {
             go_on = 0;
@@ -67,17 +71,34 @@ int main() {
          if (Snake_Self_Collision(snake, SnakeLength) || Snake_OutOfBounds(snake[0].x, snake[0].y)) {
             go_on = 0;
             GameOverScreen();
+            switch (Touche()) {
+            case XK_Return : 
+                FermerGraphique();
+                Screen_Menu();    
+            break;
+        
+            case XK_Escape : 
+                return 0;
+            break;
+    }
 
         }
 
-        Playground(snake, SnakeLength);
-        Apples_Redraw(Apples, apples_number);
-        MoveRocks(obstacles, nb_obstacles);
         
        if (Snake_Obstacle_Collision(snake, SnakeLength, obstacles, nb_obstacles)) {
  
             go_on = 0;
             GameOverScreen();
+            switch (Touche()) {
+            case XK_Return : 
+                FermerGraphique();
+                Screen_Menu();    
+            break;
+        
+            case XK_Escape : 
+                return;
+            break;
+    }
         }
 
         if (Microsecondes() > getsuivant()) {
@@ -123,8 +144,8 @@ int main() {
                 case XK_space:
                     ChargerImage("pause-menu.png", WindowWidth/2 - 150, WindowHeight/2 -250, 0, 0, 930, 750);
                     sprintf(temps_str, "%02lu s", seconds);
-                    ChoisirCouleurDessin(CouleurParNom("white"));
-                    EcrireTexte(WindowWidth/2 + 50, WindowHeight/2 - 100, temps_str, 1);
+                    ChoisirCouleurDessin(CouleurParComposante(99, 99, 99));
+                    EcrireTexte(WindowWidth/2, WindowHeight/2 - 100, temps_str, 1);
                     sprintf(score_str, "%06d", score);
                     EcrireTexte(WindowWidth/2 - 80, WindowHeight/2 - 100, score_str, 1);
                     while (Touche() != XK_space) {
@@ -150,7 +171,8 @@ int main() {
     }
  
     free(snake);
-    Touche();
+    if(Touche() == XK_Escape) {
     FermerGraphique();
     return EXIT_SUCCESS;
+    }
 }

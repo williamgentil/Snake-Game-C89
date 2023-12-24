@@ -12,7 +12,7 @@ void Rock_Random(Rock Rocks[], int *nbrock) {
 
     while (i < *nbrock) {
         Present = 0;
-        x = 15 + rand() % (950 - 2 * 15 - 15);
+        x = 15 + rand() % (900 - 2 * 15 - 15);
         y = 15 + rand() % (600 - 2 * 15 - 15);
         x = x - (x % 15);
         y = y - (y % 15);
